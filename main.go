@@ -17,9 +17,6 @@ import (
 	_ "net/http/pprof"
 )
 
-
-
-
 func init() {
 	setting.Setup()
 	models.Setup()
@@ -28,22 +25,22 @@ func init() {
 	util.Setup()
 }
 func addNum() func(num int) int {
-	add:= func(num int) int{
+	add := func(num int) int {
 		i := 1
-		for a := 1;a <= num; a++{
-				i+=a
-			}
+		for a := 1; a <= num; a++ {
+			i += a
+		}
 		return i
 	}
 	return add
 }
 
 func main() {
-	addNumber:= addNum()
-	fmt.Println(addNumber(100),"add number")
+	addNumber := addNum()
+	fmt.Println(addNumber(100), "add number")
 
-	fmt.Println(addNumber(200),"add number")
-	go func(){
+	fmt.Println(addNumber(200), "add number")
+	go func() {
 		http.ListenAndServe("127.0.0.1:6060", nil)
 	}()
 
