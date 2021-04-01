@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"github.com/EDDYCJY/go-gin-example/pkg/app"
 	"github.com/EDDYCJY/go-gin-example/pkg/e"
 	"github.com/EDDYCJY/go-gin-example/service/auth_service"
@@ -28,16 +27,22 @@ func Register(c *gin.Context) {
 
 	//綁定驗證其
 	err := c.ShouldBindJSON(&req)
-	fmt.Println(appG, err, "c")
 	//沒通過驗證，返回錯誤,驗證成功是200
 	if err != nil {
 		//app.MarkErrors( err.Error())
 		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
 		return
 	}
-	_, e := auth_service.Reg(req.Username, req.Password)
+	result, er := auth_service.Reg(req.Username, req.Password)
 
-	fmt.Println(e, "errors")
+	if er != nil {
+		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
+		return
+	}
+
+	appG.Response(http.StatusOK, e.SUCCESS, map[string]bool{
+		"data": result,
+	})
 
 	//正確以後開始存表
 
