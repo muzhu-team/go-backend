@@ -1,7 +1,6 @@
 package setting
 
 import (
-	"fmt"
 	"log"
 	"time"
 
@@ -75,7 +74,6 @@ func Setup() {
 	mapTo("server", ServerSetting)
 	mapTo("database", DatabaseSetting)
 	mapTo("redis", RedisSetting)
-	fmt.Printf("x的类型是%T", AppSetting)
 
 	AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second

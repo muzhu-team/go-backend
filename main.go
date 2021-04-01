@@ -24,19 +24,8 @@ func init() {
 	gredis.Setup()
 	util.Setup()
 }
-func addNum() func(num int) int {
-	add := func(num int) int {
-		i := 1
-		for a := 1; a <= num; a++ {
-			i += a
-		}
-		return i
-	}
-	return add
-}
 
 func main() {
-
 	gin.SetMode(setting.ServerSetting.RunMode)
 
 	routersInit := routers.InitRouter()
