@@ -9,4 +9,4 @@ type Auth struct {
 
 func (a *Auth) Check() (bool, error) {
 	return models.CheckAuth(a.Username, a.Password)
-}
+}j
