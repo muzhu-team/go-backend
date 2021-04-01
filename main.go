@@ -36,13 +36,6 @@ func addNum() func(num int) int {
 }
 
 func main() {
-	addNumber := addNum()
-	fmt.Println(addNumber(100), "add number")
-
-	fmt.Println(addNumber(200), "add number")
-	go func() {
-		http.ListenAndServe("127.0.0.1:6060", nil)
-	}()
 
 	gin.SetMode(setting.ServerSetting.RunMode)
 
