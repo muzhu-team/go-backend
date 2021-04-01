@@ -9,8 +9,8 @@ import (
 )
 
 type RegisterReq struct {
-	Username string `json:"username" binding:"required` //解析json username 必須輸入  再限制一下長度 根據業務要求來  比如你的賬號名不能超過10個字母
-	Password string `json:"password" binding:"required`
+	Username string `json:"username" binding:"required"` //解析json username 必須輸入  再限制一下長度 根據業務要求來  比如你的賬號名不能超過10個字母
+	Password string `json:"password" binding:"required"`
 }
 
 // @Summary Confirm registration information
@@ -29,34 +29,15 @@ func Register(c *gin.Context) {
 	err := c.ShouldBindJSON(&req)
 	//沒通過驗證，返回錯誤,驗證成功是200
 	if err != nil {
-		//app.MarkErrors( err.Error())
-		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
-		return
-	}
-	result, er := auth_service.Reg(req.Username, req.Password)
-
-	if er != nil {
 		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
 		return
 	}
 
-	appG.Response(http.StatusOK, e.SUCCESS, map[string]bool{
-		"data": result,
-	})
+	if _, er := auth_service.Reg(req.Username, req.Password); er != nil {
+		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
+		return
+	}
 
-	//正確以後開始存表
-
-	//if !ok {
-	//	app.MarkErrors(valid.Errors)
-	//	appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
-	//	return
-	//}
-
-	//if ; err != nil {
-	//
-	//
-	//	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	//	return
-	//}
+	appG.Response(http.StatusOK, e.SUCCESS, nil)
 
 }
