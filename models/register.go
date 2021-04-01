@@ -22,7 +22,5 @@ func InsertUser(username, password string) (bool, error) {
 	if err := db.Create(&user).Error; err != nil {
 		return false, err
 	}
-	//TODO 需要查询一下是否有这个用户，如果有返回错误
-
 	return false, nil
 }
