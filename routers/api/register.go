@@ -10,8 +10,8 @@ import (
 )
 
 type RegisterReq struct {
-	username string `json:"username" binding:"required` //解析json username 必須輸入  再限制一下長度 根據業務要求來  比如你的賬號名不能超過10個字母
-	password string `json:"password" binding:"required`
+	Username string `json:"username" binding:"required` //解析json username 必須輸入  再限制一下長度 根據業務要求來  比如你的賬號名不能超過10個字母
+	Password string `json:"password" binding:"required`
 }
 
 // @Summary Confirm registration information
@@ -35,7 +35,9 @@ func Register(c *gin.Context) {
 		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
 		return
 	}
-	auth_service.Register{Username: req.username, Password: req.password}
+	_, e := auth_service.Reg(req.Username, req.Password)
+
+	fmt.Println(e, "errors")
 
 	//正確以後開始存表
 
