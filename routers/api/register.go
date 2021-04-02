@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/EDDYCJY/go-gin-example/pkg/app"
 	"github.com/EDDYCJY/go-gin-example/pkg/e"
+	"github.com/EDDYCJY/go-gin-example/pkg/util"
 	"github.com/EDDYCJY/go-gin-example/service/auth_service"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -25,6 +26,24 @@ func Register(c *gin.Context) {
 	appG := app.Gin{C: c}
 	//沒通過驗證，返回錯誤,驗證成功是200
 	if err := c.ShouldBindJSON(&req); err != nil {
+		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
+		return
+	}
+	//验证账号大小写和数字
+	//usrStr := util.StrReplaceAllString(req.Username)
+	pwdStr := util.StrReplaceAllString(req.Password)
+	//限制账号的大写字母必须大于1
+	//if usrStr.CapitalLetter < 1 {
+	//	appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
+	//	return
+	//}
+	//限制账号的特殊字符必须大于1
+	//if usrStr.OtherString < 1 {
+	//	appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
+	//	return
+	//}
+	//限制密码的特殊字符必须大于1
+	if pwdStr.OtherString < 1 {
 		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
 		return
 	}
