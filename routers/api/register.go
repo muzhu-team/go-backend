@@ -30,8 +30,13 @@ func Register(c *gin.Context) {
 		return
 	}
 	//验证账号大小写和数字
-	//usrStr := util.StrReplaceAllString(req.Username)
+	usrStr := util.StrReplaceAllString(req.Username)
 	pwdStr := util.StrReplaceAllString(req.Password)
+	//限制账号的小写字母不能小于1位 并且 数字不能小于1位
+	if usrStr.LowercaseLetters < 1 || usrStr.Number < 1 {
+		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
+		return
+	}
 	//限制账号的大写字母必须大于1
 	//if usrStr.CapitalLetter < 1 {
 	//	appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
