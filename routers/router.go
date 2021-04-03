@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"github.com/EDDYCJY/go-gin-example/middleware/cors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,6 +21,8 @@ import (
 // InitRouter initialize routing information
 func InitRouter() *gin.Engine {
 	r := gin.New()
+	//后端跨域
+	r.Use(cors.Cors())
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
@@ -27,10 +30,10 @@ func InitRouter() *gin.Engine {
 	r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
 	r.StaticFS("/qrcode", http.Dir(qrcode.GetQrCodeFullPath()))
 
-	r.POST("/auth", api.GetAuth)
+	r.POST("/api/auth", api.GetAuth)
 
 	//用户注册
-	r.POST("/register", api.Register)
+	r.POST("/api/register", api.Register)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.POST("/upload", api.UploadImage)
