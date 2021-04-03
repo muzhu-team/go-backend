@@ -1,12 +1,14 @@
 package cors
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func Cors() gin.HandlerFunc {
 	return func(context *gin.Context) {
+		fmt.Println(context, "content")
 		method := context.Request.Method
 		context.Header("Access-Control-Allow-Origin", "*")
 		context.Header("Access-Control-Allow-Headers", "Content-Type,AccessToken,X-CSRF-Token, Authorization, Token")
