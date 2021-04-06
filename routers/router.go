@@ -37,7 +37,11 @@ func InitRouter() *gin.Engine {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.POST("/upload", api.UploadImage)
 
-	r.POST("/device/:id", v1.EditDevice)
+	//获取设备信息
+	r.GET("/device/:id", v1.GetDevice)
+	//更新设备
+	r.POST("/device", v1.EditDevice)
+	//删除设备
 	r.DELETE("/device/:id", v1.DeleteDevice)
 
 	apiv1 := r.Group("/api/v1")

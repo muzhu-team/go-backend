@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/EDDYCJY/go-gin-example/pkg/app"
@@ -16,15 +17,16 @@ import (
 // @Router /api/v1/articles/{id} [get]
 
 type Device struct {
-	ID           int    `form:"id" valid:"Required;Min(1)"`
-	Type         int    `form:"type" valid:"Required;Min(1)"`
-	Name         string `form:"name" valid:"Required;MaxSize(100)"`
-	Photo        string `form:"photo" valid:"MaxSize(255)"`
-	Model        string `form:"model" valid:"Required;MaxSize(100)"`
-	PurchaseDate int    `form:"purchase_date" valid:"Required;Min(1)"`
-	Manufacturer string `form:"manufacturer" valid:"Required;MaxSize(100)"`
-	StatusNum    int    `form:"status_num" valid:"Min(0)"`
-	UserId       int    `form:"equipment_id" valid:"Required,Min(1)"`
+	ID int `json:"id" valid:"Required;Min(1)"`
+	//ID           int    `json:"id" valid:"Required;Min(1)"`
+	//Type         int    `json:"type" valid:"Required;Min(1)"`
+	//Name         string `json:"name" valid:"Required;MaxSize(100)"`
+	//Photo        string `json:"photo" valid:"MaxSize(255)"`
+	//Model        string `json:"model" valid:"Required;MaxSize(100)"`
+	//PurchaseDate int    `json:"purchase_date" valid:"Required;Min(1)"`
+	//Manufacturer string `json:"manufacturer" valid:"Required;MaxSize(100)"`
+	//StatusNum    int    `json:"status_num" valid:"Min(0)"`
+	//UserId       int    `json:"equipment_id" valid:"Required,Min(1)"`
 }
 
 type Sensor struct {
@@ -39,8 +41,23 @@ type Sensor struct {
 	EquipmentId  int    `form:"equipment_id" valid:"Required,Min(1)"`
 }
 
+func GetDevice(c *gin.Context) {
+	appG := app.Gin{C: c}
+	appG.Response(http.StatusOK, e.SUCCESS, c.Params)
+}
+
 func EditDevice(c *gin.Context) {
 	appG := app.Gin{C: c}
+	var dev Device
+	fmt.Println(c.Params)
+
+	if err := c.ShouldBindJSON(&dev); err != nil {
+		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
+		return
+	}
+
+	fmt.Println("id = ", dev.ID)
+
 	appG.Response(http.StatusOK, e.SUCCESS, c.Param("id"))
 	//id := com.StrTo(c.Param("id")).MustInt()
 	//valid := validation.Validation{}
