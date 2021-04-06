@@ -17,26 +17,26 @@ import (
 
 type Device struct {
 	ID           int    `form:"id" valid:"Required;Min(1)"`
-	Type         int    `form:"tag_id" valid:"Required;Min(1)"`
-	Name         string `form:"title" valid:"Required;MaxSize(100)"`
-	Photo        string `form:"desc" valid:"Required;MaxSize(255)"`
-	Model        string `form:"content" valid:"Required;MaxSize(65535)"`
-	PurchaseDate int    `form:"modified_by" valid:"Required;MaxSize(100)"`
-	Manufacturer string `form:"cover_image_url" valid:"Required;MaxSize(255)"`
-	StatusNum    int    `form:"state" valid:"Range(0,1)"`
-	UserId       int    `form:"state" valid:"Range(0,1)"`
+	Type         int    `form:"type" valid:"Required;Min(1)"`
+	Name         string `form:"name" valid:"Required;MaxSize(100)"`
+	Photo        string `form:"photo" valid:"MaxSize(255)"`
+	Model        string `form:"model" valid:"Required;MaxSize(100)"`
+	PurchaseDate int    `form:"purchase_date" valid:"Required;Min(1)"`
+	Manufacturer string `form:"manufacturer" valid:"Required;MaxSize(100)"`
+	StatusNum    int    `form:"status_num" valid:"Min(0)"`
+	UserId       int    `form:"equipment_id" valid:"Required,Min(1)"`
 }
 
 type Sensor struct {
 	ID           int    `form:"id" valid:"Required;Min(1)"`
-	Type         int    `form:"tag_id" valid:"Required;Min(1)"`
-	Name         string `form:"title" valid:"Required;MaxSize(100)"`
-	Photo        string `form:"desc" valid:"Required;MaxSize(255)"`
-	Model        string `form:"content" valid:"Required;MaxSize(65535)"`
-	PurchaseDate int    `form:"modified_by" valid:"Required;MaxSize(100)"`
-	Manufacturer string `form:"cover_image_url" valid:"Required;MaxSize(255)"`
-	StatusNum    int    `form:"state" valid:"Range(0,1)"`
-	EquipmentId  int    `form:"state" valid:"Range(0,1)"`
+	Type         int    `form:"type" valid:"Required;Min(1)"`
+	Name         string `form:"name" valid:"Required;MaxSize(100)"`
+	Photo        string `form:"photo" valid:"MaxSize(255)"`
+	Model        string `form:"model" valid:"Required;MaxSize(100)"`
+	PurchaseDate int    `form:"purchase_date" valid:"Required;Min(1)"`
+	Manufacturer string `form:"manufacturer" valid:"Required;MaxSize(100)"`
+	StatusNum    int    `form:"status_num" valid:"Min(0)"`
+	EquipmentId  int    `form:"equipment_id" valid:"Required,Min(1)"`
 }
 
 func EditDevice(c *gin.Context) {
