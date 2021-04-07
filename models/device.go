@@ -1,9 +1,7 @@
 package models
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
-	"reflect"
 )
 
 // CheckAuth checks if authentication information exists
@@ -43,28 +41,26 @@ type Sensor struct {
 }
 
 func SelectDevice(id int) (Device, error) {
-	//return id,nil
 
-	//deviceInfo := db.Where("id = ?", id).First(&user)
-	fmt.Println("ID = ", id)
 	var dev Device
 	deviceInfo := db.Select("*").Where(Device{ID: id}).First(&dev)
 	if dev.ID == 0 || (deviceInfo.Error != nil && deviceInfo.Error != gorm.ErrRecordNotFound) {
 		return Device{}, deviceInfo.Error
 	}
-	//	return false, err
-	//}
-	//
-	//if auth.ID > 0 {
-	//	return true, nil
-	//}
-	//
-	//return false, nil
-
-	fmt.Println(dev.ID, reflect.TypeOf(dev))
-
-	//if err := db.Create(&user).Error; err != nil {
-	//	return "xxx", err
-	//}
 	return dev, nil
+}
+
+func EditDevice(dev Device) error {
+
+	if result := db.Where("id = ?", dev.ID).First(&dev); result.RowsAffected > 0 {
+		if err := db.Update(&dev).Error; err != nil {
+			return err
+		}
+		return nil
+	}
+
+	if err := db.Create(&dev).Error; err != nil {
+		return err
+	}
+	return nil
 }

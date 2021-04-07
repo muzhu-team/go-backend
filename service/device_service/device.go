@@ -12,3 +12,11 @@ func SelectDevice(id string) (models.Device, error) {
 	}
 	return models.SelectDevice(intID)
 }
+
+func EditDevice(dev models.Device) error {
+	//intID, err := strconv.Atoi(id)
+	//if err != nil {
+	//	return err
+	//}
+	return models.EditDevice(dev)
+}

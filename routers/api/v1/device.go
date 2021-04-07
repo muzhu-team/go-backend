@@ -31,16 +31,29 @@ func GetDevice(c *gin.Context) {
 func EditDevice(c *gin.Context) {
 	appG := app.Gin{C: c}
 	var dev models.Device
-	fmt.Println(c.Params)
+	//fmt.Println(c.Param("id"))
+	//err := device_service.EditDevice(models.Device{})
+	//if err != nil {
+	//	appG.Response(http.StatusInternalServerError, e.ERROR_GET_DEVICE_FAIL, nil)
+	//	return
+	//}
 
 	if err := c.ShouldBindJSON(&dev); err != nil {
+		fmt.Print(err)
 		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
 		return
 	}
+	fmt.Println(dev)
 
 	fmt.Println("id = ", dev.ID)
 
-	appG.Response(http.StatusOK, e.SUCCESS, c.Param("id"))
+	err := device_service.EditDevice(dev)
+	if err != nil {
+		println(err.Error())
+		appG.Response(http.StatusInternalServerError, e.ERROR_EDIT_DEVICE_FAIL, nil)
+		return
+	}
+
 	//id := com.StrTo(c.Param("id")).MustInt()
 	//valid := validation.Validation{}
 	//valid.Min(id, 1, "id")
@@ -69,6 +82,7 @@ func EditDevice(c *gin.Context) {
 	//}
 	//
 	//appG.Response(http.StatusOK, e.SUCCESS, article)
+	appG.Response(http.StatusOK, e.SUCCESS, c.Param("id"))
 }
 
 func DeleteDevice(c *gin.Context) {
