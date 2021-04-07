@@ -15,7 +15,7 @@ type Device struct {
 	PurchaseDate int    `json:"purchase_date" valid:"Required;Min(1)"`
 	Manufacturer string `json:"manufacturer" valid:"Required;MaxSize(100)"`
 	StatusNum    int    `json:"status_num" valid:"Min(0)"`
-	UserId       int    `json:"equipment_id" valid:"Required,Min(1)"`
+	UserId       int    `json:"user_id" valid:"Required,Min(1)"`
 }
 
 //id           int    `json:"id" valid:"Required;Min(1)"`
@@ -52,14 +52,7 @@ func SelectDevice(id int) (Device, error) {
 
 func EditDevice(dev Device) error {
 
-	if result := db.Where("id = ?", dev.ID).First(&dev); result.RowsAffected > 0 {
-		if err := db.Update(&dev).Error; err != nil {
-			return err
-		}
-		return nil
-	}
-
-	if err := db.Create(&dev).Error; err != nil {
+	if err := db.Save(&dev).Error; err != nil {
 		return err
 	}
 	return nil
