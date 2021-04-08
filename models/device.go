@@ -49,8 +49,25 @@ func SelectDevice(id int) (Device, error) {
 
 func EditDevice(dev Device) error {
 
+	//if dev.ID != dev.Sensor[0].ID{
+	//	errors.New("更新设备失败")
+	//}
+
 	if err := db.Save(&dev).Error; err != nil {
 		return err
+	}
+
+	if dev.Sensor[0].ID == 0 {
+		return nil
+	}
+
+	for i := range dev.Sensor {
+		if dev.ID != dev.Sensor[i].EquipmentId {
+			return errors.New("参数错误")
+		}
+		if err := EditSensor(dev.Sensor[i]); err != nil {
+			return err
+		}
 	}
 	return nil
 }
