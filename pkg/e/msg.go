@@ -32,6 +32,10 @@ var MsgFlags = map[int]string{
 	ERROR_UPLOAD_CHECK_IMAGE_FORMAT: "校验图片错误，图片格式或大小有问题",
 	ERROR_GET_DEVICE_FAIL:           "设备ID错误",
 	ERROR_EDIT_DEVICE_FAIL:          "更新设备失败",
+	ERROR_DELETE_DEVICE_FAIL:        "删除设备失败",
+	ERROR_GET_SENSOR_FAIL:           "传感器ID错误",
+	ERROR_EDIT_SENSOR_FAIL:          "更新传感器失败",
+	ERROR_DELETE_SENSOR_FAIL:        "删除传感器失败",
 }
 
 // GetMsg get error information based on Code

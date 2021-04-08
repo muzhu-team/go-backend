@@ -28,6 +28,35 @@ func GetDevice(c *gin.Context) {
 	appG.Response(http.StatusOK, e.SUCCESS, deviceInfo)
 }
 
+func EditSensor(c *gin.Context) {
+	appG := app.Gin{C: c}
+	var dev models.Device
+	//fmt.Println(c.Param("id"))
+	//err := device_service.EditDevice(models.Device{})
+	//if err != nil {
+	//	appG.Response(http.StatusInternalServerError, e.ERROR_GET_DEVICE_FAIL, nil)
+	//	return
+	//}
+
+	if err := c.ShouldBindJSON(&dev); err != nil {
+		fmt.Print(err)
+		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
+		return
+	}
+	fmt.Println("Sensor = ", dev.Sensor[0])
+
+	fmt.Println("id = ", dev.ID)
+
+	err := device_service.EditDevice(dev)
+	if err != nil {
+		println(err.Error())
+		appG.Response(http.StatusInternalServerError, e.ERROR_EDIT_DEVICE_FAIL, nil)
+		return
+	}
+
+	appG.Response(http.StatusOK, e.SUCCESS, c.Param("id"))
+}
+
 func EditDevice(c *gin.Context) {
 	appG := app.Gin{C: c}
 	var dev models.Device
@@ -43,7 +72,7 @@ func EditDevice(c *gin.Context) {
 		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
 		return
 	}
-	fmt.Println(dev)
+	fmt.Println("Sensor = ", dev.Sensor[0])
 
 	fmt.Println("id = ", dev.ID)
 
@@ -54,38 +83,15 @@ func EditDevice(c *gin.Context) {
 		return
 	}
 
-	//id := com.StrTo(c.Param("id")).MustInt()
-	//valid := validation.Validation{}
-	//valid.Min(id, 1, "id")
-	//
-	//if valid.HasErrors() {
-	//	app.MarkErrors(valid.Errors)
-	//	appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
-	//	return
-	//}
-	//
-	//articleService := article_service.Article{ID: id}
-	//exists, err := articleService.ExistByID()
-	//if err != nil {
-	//	appG.Response(http.StatusInternalServerError, e.ERROR_CHECK_EXIST_ARTICLE_FAIL, nil)
-	//	return
-	//}
-	//if !exists {
-	//	appG.Response(http.StatusOK, e.ERROR_NOT_EXIST_ARTICLE, nil)
-	//	return
-	//}
-	//
-	//article, err := articleService.Get()
-	//if err != nil {
-	//	appG.Response(http.StatusInternalServerError, e.ERROR_GET_ARTICLE_FAIL, nil)
-	//	return
-	//}
-	//
-	//appG.Response(http.StatusOK, e.SUCCESS, article)
 	appG.Response(http.StatusOK, e.SUCCESS, c.Param("id"))
 }
 
 func DeleteDevice(c *gin.Context) {
 	appG := app.Gin{C: c}
-	appG.Response(http.StatusOK, e.SUCCESS, c.Params)
+	err := device_service.DeleteDevice(c.Param("id"))
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_DELETE_DEVICE_FAIL, nil)
+		return
+	}
+	appG.Response(http.StatusOK, e.SUCCESS, "删除成功")
 }

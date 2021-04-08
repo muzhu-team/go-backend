@@ -20,3 +20,11 @@ func EditDevice(dev models.Device) error {
 	//}
 	return models.EditDevice(dev)
 }
+
+func DeleteDevice(id string) error {
+	intID, err := strconv.Atoi(id)
+	if err != nil {
+		return err
+	}
+	return models.DeleteDevice(intID)
+}
