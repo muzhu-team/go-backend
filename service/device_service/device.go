@@ -28,3 +28,27 @@ func DeleteDevice(id string) error {
 	}
 	return models.DeleteDevice(intID)
 }
+
+func SelectSensor(id string) (models.Sensor, error) {
+	intID, err := strconv.Atoi(id)
+	if err != nil {
+		return models.Sensor{}, err
+	}
+	return models.SelectSensor(intID)
+}
+
+func EditSensor(sen models.Sensor) error {
+	//intID, err := strconv.Atoi(id)
+	//if err != nil {
+	//	return err
+	//}
+	return models.EditSensor(sen)
+}
+
+func DeleteSensor(id string) error {
+	intID, err := strconv.Atoi(id)
+	if err != nil {
+		return err
+	}
+	return models.DeleteSensor(intID)
+}

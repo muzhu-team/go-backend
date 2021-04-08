@@ -20,16 +20,6 @@ type Device struct {
 	Sensor       []Sensor `json:"sensors"`
 }
 
-//id           int    `json:"id" valid:"Required;Min(1)"`
-//type         int    `json:"type" valid:"Required;Min(1)"`
-//name         string `json:"name" valid:"Required;MaxSize(100)"`
-//photo        string `json:"photo" valid:"MaxSize(255)"`
-//model        string `json:"model" valid:"Required;MaxSize(100)"`
-//purchase_date int    `json:"purchase_date" valid:"Required;Min(1)"`
-//manufacturer string `json:"manufacturer" valid:"Required;MaxSize(100)"`
-//status_num    int    `json:"status_num" valid:"Min(0)"`
-//userId       int    `json:"equipment_id" valid:"Required,Min(1)"`
-
 type Sensor struct {
 	ID           int    `json:"id" valid:"Required;Min(1)"`
 	Type         int    `json:"type" valid:"Required;Min(1)"`
@@ -45,10 +35,15 @@ type Sensor struct {
 func SelectDevice(id int) (Device, error) {
 
 	var dev Device
+
 	deviceInfo := db.Select("*").Where(Device{ID: id}).First(&dev)
-	if dev.ID == 0 || (deviceInfo.Error != nil && deviceInfo.Error != gorm.ErrRecordNotFound) {
+
+	sensorInfo := db.Find(&dev.Sensor)
+
+	if dev.ID == 0 || (deviceInfo.Error != nil && deviceInfo.Error != gorm.ErrRecordNotFound) || (sensorInfo.Error != nil && sensorInfo.Error != gorm.ErrRecordNotFound) {
 		return Device{}, deviceInfo.Error
 	}
+
 	return dev, nil
 }
 
@@ -63,13 +58,36 @@ func EditDevice(dev Device) error {
 func DeleteDevice(id int) error {
 
 	var dev Device
+	var sen Sensor
 
-	result := db.Delete(&dev, id)
-	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {
-		return result.Error
+	senResult := db.Where("equipment_id = ?", id).Delete(&sen)
+	if senResult.Error != nil && senResult.Error != gorm.ErrRecordNotFound {
+		return senResult.Error
 	}
-	if result.RowsAffected == 0 {
+	devResult := db.Delete(&dev, id)
+	if devResult.Error != nil && devResult.Error != gorm.ErrRecordNotFound {
+		return devResult.Error
+	}
+	if devResult.RowsAffected == 0 {
 		return errors.New("无此设备")
+	}
+	return nil
+}
+
+func SelectSensor(id int) (Sensor, error) {
+
+	var sen Sensor
+	sensorInfo := db.Select("*").Where(Sensor{ID: id}).First(&sen)
+	if sen.ID == 0 || (sensorInfo.Error != nil && sensorInfo.Error != gorm.ErrRecordNotFound) {
+		return Sensor{}, sensorInfo.Error
+	}
+	return sen, nil
+}
+
+func EditSensor(sen Sensor) error {
+
+	if err := db.Save(&sen).Error; err != nil {
+		return err
 	}
 	return nil
 }

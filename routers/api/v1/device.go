@@ -28,9 +28,19 @@ func GetDevice(c *gin.Context) {
 	appG.Response(http.StatusOK, e.SUCCESS, deviceInfo)
 }
 
+func GetSensor(c *gin.Context) {
+	appG := app.Gin{C: c}
+	deviceInfo, err := device_service.SelectSensor(c.Param("id"))
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_GET_SENSOR_FAIL, nil)
+		return
+	}
+	appG.Response(http.StatusOK, e.SUCCESS, deviceInfo)
+}
+
 func EditSensor(c *gin.Context) {
 	appG := app.Gin{C: c}
-	var dev models.Device
+	var sen models.Sensor
 	//fmt.Println(c.Param("id"))
 	//err := device_service.EditDevice(models.Device{})
 	//if err != nil {
@@ -38,19 +48,18 @@ func EditSensor(c *gin.Context) {
 	//	return
 	//}
 
-	if err := c.ShouldBindJSON(&dev); err != nil {
+	if err := c.ShouldBindJSON(&sen); err != nil {
 		fmt.Print(err)
 		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
 		return
 	}
-	fmt.Println("Sensor = ", dev.Sensor[0])
 
-	fmt.Println("id = ", dev.ID)
+	fmt.Println("id = ", sen.ID)
 
-	err := device_service.EditDevice(dev)
+	err := device_service.EditSensor(sen)
 	if err != nil {
 		println(err.Error())
-		appG.Response(http.StatusInternalServerError, e.ERROR_EDIT_DEVICE_FAIL, nil)
+		appG.Response(http.StatusInternalServerError, e.ERROR_EDIT_SENSOR_FAIL, nil)
 		return
 	}
 
@@ -91,6 +100,16 @@ func DeleteDevice(c *gin.Context) {
 	err := device_service.DeleteDevice(c.Param("id"))
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_DELETE_DEVICE_FAIL, nil)
+		return
+	}
+	appG.Response(http.StatusOK, e.SUCCESS, "删除成功")
+}
+
+func DeleteSensor(c *gin.Context) {
+	appG := app.Gin{C: c}
+	err := device_service.DeleteSensor(c.Param("id"))
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_DELETE_SENSOR_FAIL, nil)
 		return
 	}
 	appG.Response(http.StatusOK, e.SUCCESS, "删除成功")
