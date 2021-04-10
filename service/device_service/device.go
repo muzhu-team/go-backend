@@ -5,10 +5,18 @@ import (
 	"strconv"
 )
 
-func SelectDevice(id string) (models.Device, error) {
+func SelectDevice(id string, limit string) ([]models.Device, error) {
 	intID, err := strconv.Atoi(id)
 	if err != nil {
-		return models.Device{}, err
+		return []models.Device{}, err
+	}
+	intLimit, err := strconv.Atoi(limit)
+	if err != nil {
+		return []models.Device{}, err
+	}
+
+	if intID == 0 {
+		return models.SelectDevices(intLimit)
 	}
 	return models.SelectDevice(intID)
 }

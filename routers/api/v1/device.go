@@ -20,7 +20,15 @@ import (
 
 func GetDevice(c *gin.Context) {
 	appG := app.Gin{C: c}
-	deviceInfo, err := device_service.SelectDevice(c.Param("id"))
+	id, limit := "0", "10"
+	if value, ok := c.GetQuery("id"); ok {
+		id = value
+	}
+	if value, ok := c.GetQuery("limit"); ok {
+		limit = value
+	}
+	//fmt.Println(c.Query("id"),c.Query("limit"))
+	deviceInfo, err := device_service.SelectDevice(id, limit)
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_GET_DEVICE_FAIL, nil)
 		return

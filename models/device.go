@@ -32,16 +32,43 @@ type Sensor struct {
 	EquipmentId  int    `json:"equipment_id" valid:"Required,Min(1)"`
 }
 
-func SelectDevice(id int) (Device, error) {
+func SelectDevice(id int) ([]Device, error) {
 
-	var dev Device
+	var dev []Device
 
 	deviceInfo := db.Select("*").Where(Device{ID: id}).First(&dev)
 
-	sensorInfo := db.Find(&dev.Sensor)
+	if len(dev) == 0 {
+		return []Device{}, deviceInfo.Error
+	}
 
-	if dev.ID == 0 || (deviceInfo.Error != nil && deviceInfo.Error != gorm.ErrRecordNotFound) || (sensorInfo.Error != nil && sensorInfo.Error != gorm.ErrRecordNotFound) {
-		return Device{}, deviceInfo.Error
+	sensorInfo := db.Where(Sensor{EquipmentId: dev[0].ID}).Find(&dev[0].Sensor)
+
+	if (deviceInfo.Error != nil && deviceInfo.Error != gorm.ErrRecordNotFound) || (sensorInfo.Error != nil && sensorInfo.Error != gorm.ErrRecordNotFound) {
+		return []Device{}, deviceInfo.Error
+	}
+
+	return dev, nil
+}
+
+func SelectDevices(limit int) ([]Device, error) {
+
+	var dev []Device
+
+	devicesInfo := db.Limit(limit).Find(&dev)
+
+	//sensorInfo := db.Find(&dev[0].Sensor)
+
+	for i := 0; i < len(dev); i++ {
+		sensorInfo := db.Where(Sensor{EquipmentId: dev[i].ID}).Find(&dev[i].Sensor)
+		if sensorInfo.Error != nil && sensorInfo.Error != gorm.ErrRecordNotFound {
+			return []Device{}, sensorInfo.Error
+		}
+	}
+
+	//if dev[0].ID == 0 || (deviceInfo.Error != nil && deviceInfo.Error != gorm.ErrRecordNotFound) || (sensorInfo.Error != nil && sensorInfo.Error != gorm.ErrRecordNotFound) {
+	if dev[0].ID == 0 || (devicesInfo.Error != nil && devicesInfo.Error != gorm.ErrRecordNotFound) {
+		return []Device{}, devicesInfo.Error
 	}
 
 	return dev, nil
