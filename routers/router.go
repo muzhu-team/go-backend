@@ -39,18 +39,18 @@ func InitRouter() *gin.Engine {
 
 	//test
 	//获取设备信息
-	r.GET("/device", v1.GetDevice)
+	r.GET("/api/device", v1.GetDevice)
 	//更新设备信息
-	r.POST("/device", v1.EditDevice)
+	r.POST("/api/device", v1.EditDevice)
 	//删除设备
-	r.DELETE("/device/:id", v1.DeleteDevice)
+	r.DELETE("/api/device/:id", v1.DeleteDevice)
 
 	//获取传感器信息
-	r.GET("/sensor/:id", v1.GetSensor)
+	r.GET("/api/sensor/:id", v1.GetSensor)
 	//更新传感器信息
-	r.POST("/sensor", v1.EditSensor)
+	r.POST("/api/sensor", v1.EditSensor)
 	//删除传感器
-	r.DELETE("/sensor/:id", v1.DeleteSensor)
+	r.DELETE("/api/sensor/:id", v1.DeleteSensor)
 
 	apiv1 := r.Group("/api/v1")
 	apiv1.Use(jwt.JWT())
